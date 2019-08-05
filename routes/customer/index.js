@@ -45,7 +45,7 @@ router.post("/register", (req, res) => {
           newCustomer.password = hash;
           newCustomer
             .save()
-            .then(customer => res.status(201).json(customer))
+            .then(customer => res.status(201))
             .catch(err => console.log(err));
         });
       });
