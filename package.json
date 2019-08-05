@@ -14,6 +14,7 @@
         "nodemon": "^1.19.1"
     },
     "dependencies": {
+        "awesome-phonenumber": "^2.15.0",
         "bcryptjs": "^2.4.3",
         "body-parser": "^1.19.0",
         "concurrently": "^4.1.1",
