@@ -2,7 +2,6 @@ const router = require("express").Router();
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const keys = require("../../config/mongoKey");
-const PhoneNumberValidator = require("awesome-phonenumber");
 
 const passport = require("passport");
 
@@ -30,17 +29,12 @@ router.post("/register", (req, res) => {
     if (customer) {
       return res.status(400).json({ email: "Email already exists" });
     } else {
-      const phoneNumber = new PhoneNumberValidator(
-        data.phoneNumber,
-        data.countryCode
-      );
-      const standardPhoneNumber = phoneNumber.getNumber("e164");
-
       const newCustomer = new Customer({
         firstName: req.body.firstName,
         lastName: req.body.lastName,
         email: req.body.email,
-        phoneNumber: standardPhoneNumber,
+        phoneNumber: req.body.phoneNumber,
+        countryCode: req.body.countryCode,
         password: req.body.password
       });
 
@@ -90,9 +84,10 @@ router.post("/login", (req, res) => {
         const payload = {
           id: customer._id,
           firstName: customer.firstName,
-          lastName: customer.lastName
+          lastName: customer.lastName,
           email: customer.email,
-          phoneNumber: customer.phoneNumber
+          phoneNumber: customer.phoneNumber,
+          countryCode: customer.countryCode
         };
 
         // Sign token
