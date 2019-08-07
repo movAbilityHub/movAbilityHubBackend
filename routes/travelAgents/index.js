@@ -6,7 +6,7 @@ const keys = require("../../config/mongoKey");
 const passport = require("passport");
 
 // Load input validation
-const validateTravelAgentsRegisterInput = require("../../validation/register");
+const validateTravelAgentsRegisterInput = require("../../validation/travelAgentsRegister");
 const validateLoginInput = require("../../validation/login");
 
 // Load User model
