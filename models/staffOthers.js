@@ -15,6 +15,10 @@ const staffOthersSchema = new Schema({
     type: String,
     required: true
   },
+  organisationType: {
+    type: String,
+    required: true
+  },
   email: {
     type: String,
     required: true
@@ -41,6 +45,10 @@ const staffOthersSchema = new Schema({
   },
   approvedOn: {
     type: Date,
+    required: false
+  },
+  approvedBy: {
+    type: String,
     required: false
   }
 });
