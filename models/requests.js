@@ -4,7 +4,6 @@ const db = require("../config/mongoKey").mongoURI;
 
 const connection = mongoose.createConnection(db);
 autoIncrement.initialize(connection, { useNewUrlParser: true });
-console.log("Autoincrement connection established");
 
 const Schema = mongoose.Schema;
 
@@ -50,8 +49,20 @@ const requestSchema = new Schema({
     type: Boolean,
     default: null
   },
+  acceptedBy: {
+    type: String,
+    required: false
+  },
   requestDescription: {
     type: String,
+    required: true
+  },
+  date: {
+    type: Date,
+    default: Date.now
+  },
+  requestFor: {
+    type: Number,
     required: true
   }
 });
