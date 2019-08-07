@@ -53,15 +53,19 @@ const requestSchema = new Schema({
     type: String,
     required: false
   },
-  requestDescription: {
-    type: String,
-    required: true
-  },
   date: {
     type: Date,
     default: Date.now
   },
-  requestFor: {
+  requestedBy: {
+    type: String,
+    required: true
+  },
+  requesterID: {
+    type: String,
+    required: true
+  },
+  requestedFor: {
     type: Number,
     required: true
   }
