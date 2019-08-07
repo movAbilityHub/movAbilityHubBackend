@@ -60,6 +60,10 @@ const careReceiverSchema = new Schema({
   additionalRemarks: {
     type: String,
     required: false
+  },
+  date: {
+    type: Date,
+    default: Date.now
   }
 });
 
