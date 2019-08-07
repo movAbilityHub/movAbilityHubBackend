@@ -2,7 +2,7 @@ const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
 
 // Create Schema
-const customerSchema = new Schema({
+const staffIATASchema = new Schema({
   firstName: {
     type: String,
     required: true
@@ -37,4 +37,4 @@ const customerSchema = new Schema({
   }
 });
 
-module.exports = Customer = mongoose.model("Customer", customerSchema);
+module.exports = StaffIATA = mongoose.model("staffIATA", staffIATASchema);
