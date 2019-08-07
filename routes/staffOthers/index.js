@@ -6,11 +6,11 @@ const keys = require("../../config/mongoKey");
 const passport = require("passport");
 
 // Load input validation
-const validateOtherStaffRegisterInput = require("../../validation/register");
+const validateOtherStaffRegisterInput = require("../../validation/otherStaffRegister");
 const validateLoginInput = require("../../validation/login");
 
 // Load User model
-const StaffOthers = require("../../models/customers");
+const StaffOthers = require("../../models/staffOthers");
 
 // @route POST users/register
 // @desc Register user
@@ -33,6 +33,7 @@ router.post("/register", (req, res) => {
         firstName: req.body.firstName,
         lastName: req.body.lastName,
         organisationName: req.body.organisationName,
+        organisationType: req.body.organisationType,
         code: req.body.code,
         email: req.body.email,
         phoneNumber: req.body.phoneNumber,
