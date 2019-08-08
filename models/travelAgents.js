@@ -31,6 +31,10 @@ const travelAgentsSchema = new Schema({
     type: String,
     required: true
   },
+  userType: {
+    type: String,
+    default: "travelAgent"
+  },
   date: {
     type: Date,
     default: Date.now

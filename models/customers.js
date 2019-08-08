@@ -27,6 +27,10 @@ const customerSchema = new Schema({
     type: String,
     required: true
   },
+  userType: {
+    type: String,
+    default: "customer"
+  },
   date: {
     type: Date,
     default: Date.now

@@ -31,6 +31,10 @@ const staffIATASchema = new Schema({
     type: String,
     required: true
   },
+  userType: {
+    type: String,
+    default: "IATA"
+  },
   date: {
     type: Date,
     default: Date.now

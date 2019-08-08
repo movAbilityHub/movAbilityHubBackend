@@ -39,6 +39,11 @@ const staffOthersSchema = new Schema({
     type: String,
     required: true
   },
+  userType: {
+    type: String,
+    requred: true,
+    enum: ["airline", "airport", "travelAgency"]
+  },
   appliedOn: {
     type: Date,
     default: Date.now
