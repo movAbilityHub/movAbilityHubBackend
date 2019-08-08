@@ -17,7 +17,8 @@ const staffOthersSchema = new Schema({
   },
   organisationType: {
     type: String,
-    required: true
+    required: true,
+    enum: ["airline", "airport", "travelAgency"]
   },
   email: {
     type: String,
@@ -38,11 +39,6 @@ const staffOthersSchema = new Schema({
   code: {
     type: String,
     required: true
-  },
-  userType: {
-    type: String,
-    requred: true,
-    enum: ["airline", "airport", "travelAgency"]
   },
   appliedOn: {
     type: Date,
