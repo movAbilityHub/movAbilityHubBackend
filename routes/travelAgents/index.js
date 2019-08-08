@@ -89,7 +89,8 @@ router.post("/login", (req, res) => {
           email: agent.email,
           phoneNumber: agent.phoneNumber,
           countryCode: agent.countryCode,
-          agencyCode: agent.agencyCode
+          agencyCode: agent.agencyCode,
+          userType: agent.userType
         };
 
         // Sign token
