@@ -72,7 +72,7 @@ careReceiverSchema.plugin(autoIncrement.plugin, {
   field: "id"
 });
 
-module.exports = careReceiver = mongoose.model(
+module.exports = CareReceiver = mongoose.model(
   "careReceiver",
   careReceiverSchema
 );
