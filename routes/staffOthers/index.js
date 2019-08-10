@@ -33,12 +33,12 @@ router.post("/register", (req, res) => {
         firstName: req.body.firstName,
         lastName: req.body.lastName,
         organisationName: req.body.organisationName,
-        organisationType: req.body.organisationType,
         code: req.body.code,
         email: req.body.email,
         phoneNumber: req.body.phoneNumber,
         countryCode: req.body.countryCode,
-        password: req.body.password
+        password: req.body.password,
+        userType: req.body.userType
       });
 
       // Hash password before saving in database
@@ -71,6 +71,7 @@ router.post("/login", (req, res) => {
 
   const email = req.body.email;
   const password = req.body.password;
+  const userType = req.body.userType;
 
   // Find user by email
   StaffOthers.findOne({ email }).then(staff => {
@@ -82,6 +83,10 @@ router.post("/login", (req, res) => {
     // Check if user exists
     if (!staff.approvedOn) {
       return res.status(400).json({ account: "Account not approved" });
+    }
+
+    if (staff.userType !== userType) {
+      return res.status(400).json({ userNotFound: "User not found" });
     }
 
     // Check password
@@ -97,7 +102,8 @@ router.post("/login", (req, res) => {
           email: staff.email,
           organisationName: staff.organisationName,
           phoneNumber: staff.phoneNumber,
-          countryCode: staff.countryCode
+          countryCode: staff.countryCode,
+          userType: staff.userType
         };
 
         // Sign token
@@ -108,7 +114,7 @@ router.post("/login", (req, res) => {
             expiresIn: 604800 // 7 days in seconds
           },
           (err, token) => {
-            res.status(302).json({
+            res.status(200).json({
               token: token
             });
           }

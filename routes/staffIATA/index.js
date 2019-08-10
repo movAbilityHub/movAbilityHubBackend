@@ -89,7 +89,8 @@ router.post("/login", (req, res) => {
           email: staff.email,
           phoneNumber: staff.phoneNumber,
           countryCode: staff.countryCode,
-          staffID: staff.staffID
+          staffID: staff.staffID,
+          userType: customer.userType
         };
 
         // Sign token
@@ -100,7 +101,7 @@ router.post("/login", (req, res) => {
             expiresIn: 604800 // 7 days in seconds
           },
           (err, token) => {
-            res.status(302).json({
+            res.status(200).json({
               token: token
             });
           }

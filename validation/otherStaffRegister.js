@@ -12,9 +12,7 @@ module.exports = function validateOtherStaffRegisterInput(data) {
   data.organisationName = !isEmpty(data.organisationName)
     ? data.organisationName
     : "";
-  data.organisationType = !isEmpty(data.organisationType)
-    ? data.organisationType
-    : "";
+  data.userType = !isEmpty(data.userType) ? data.userType : "";
   data.email = !isEmpty(data.email) ? data.email : "";
   data.code = !isEmpty(data.code) ? data.code : "";
   data.countryCode = !isEmpty(data.countryCode) ? data.countryCode : "";
@@ -37,8 +35,8 @@ module.exports = function validateOtherStaffRegisterInput(data) {
   }
 
   // Organisation Type checks
-  if (Validator.isEmpty(data.organisationType)) {
-    errors.organisationType = "Organisation type is required";
+  if (Validator.isEmpty(data.userType)) {
+    errors.userType = "Organisation type is required";
   }
 
   // Email checks

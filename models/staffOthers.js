@@ -15,7 +15,7 @@ const staffOthersSchema = new Schema({
     type: String,
     required: true
   },
-  organisationType: {
+  userType: {
     type: String,
     required: true,
     enum: ["airline", "airport", "travelAgency"]

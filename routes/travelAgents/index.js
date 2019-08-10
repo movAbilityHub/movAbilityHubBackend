@@ -101,7 +101,7 @@ router.post("/login", (req, res) => {
             expiresIn: 604800 // 7 days in seconds
           },
           (err, token) => {
-            res.status(302).json({
+            res.status(200).json({
               token: token
             });
           }
