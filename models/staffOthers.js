@@ -28,10 +28,6 @@ const staffOthersSchema = new Schema({
     type: Number,
     required: true
   },
-  countryCode: {
-    type: String,
-    required: true
-  },
   password: {
     type: String,
     required: true

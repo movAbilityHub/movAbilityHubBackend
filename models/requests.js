@@ -97,10 +97,6 @@ const requestSchema = new Schema({
     type: Number,
     required: true
   },
-  countryCode: {
-    type: String,
-    required: true
-  },
   disability: {
     type: String,
     required: true

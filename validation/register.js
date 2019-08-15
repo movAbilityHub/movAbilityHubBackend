@@ -10,7 +10,6 @@ module.exports = function validateRegisterInput(data) {
   data.firstName = !isEmpty(data.firstName) ? data.firstName : "";
   data.lastName = !isEmpty(data.lastName) ? data.lastName : "";
   data.email = !isEmpty(data.email) ? data.email : "";
-  data.countryCode = !isEmpty(data.countryCode) ? data.countryCode : "";
   data.phoneNumber = !isEmpty(data.phoneNumber) ? data.phoneNumber : "";
   data.password = !isEmpty(data.password) ? data.password : "";
   data.password2 = !isEmpty(data.password2) ? data.password2 : "";
@@ -31,26 +30,17 @@ module.exports = function validateRegisterInput(data) {
     errors.email = "Email is invalid";
   }
 
-  // Country Code checks
-  if (Validator.isEmpty(data.countryCode)) {
-    errors.countryCode = "Country code is required";
-  }
-
   // Phone Number checks
   if (Validator.isEmpty(data.phoneNumber)) {
     errors.phoneNumber = "Phone Number is required";
   }
 
   // Region code + Phone number validation
-  if (
-    !Validator.isEmpty(data.countryCode) &&
-    !Validator.isEmpty(data.phoneNumber)
-  ) {
-    phoneNumber = new PhoneNumberValidator(data.phoneNumber, data.countryCode);
-    if (!phoneNumber.isValid) {
+  if (!Validator.isEmpty(data.phoneNumber)) {
+    if (!data.phoneNumber.isValid) {
       errors.phoneNumberIsValid = "Enter a valid phone number";
     }
-    if (!phoneNumber.isMobile) {
+    if (!data.phoneNumber.isMobile) {
       errors.phoneNumberIsMobile = "The entered number isn't a mobile number";
     }
   }

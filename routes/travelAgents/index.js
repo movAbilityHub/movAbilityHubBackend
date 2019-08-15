@@ -35,7 +35,6 @@ router.post("/register", (req, res) => {
         email: req.body.email,
         agencyCode: req.body.agencyCode,
         phoneNumber: req.body.phoneNumber,
-        countryCode: req.body.countryCode,
         password: req.body.password
       });
 
@@ -88,7 +87,6 @@ router.post("/login", (req, res) => {
           lastName: agent.lastName,
           email: agent.email,
           phoneNumber: agent.phoneNumber,
-          countryCode: agent.countryCode,
           agencyCode: agent.agencyCode,
           userType: agent.userType
         };

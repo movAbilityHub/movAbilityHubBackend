@@ -21,7 +21,6 @@ module.exports = function validateStoreRequest(data) {
   data.service = !isEmpty(data.service) ? data.service : "";
   data.requestedFor = !isEmpty(data.requestedFor) ? data.requestedFor : "";
   data.phoneNumber = !isEmpty(data.phoneNumber) ? data.phoneNumber : "";
-  data.countryCode = !isEmpty(data.countryCode) ? data.countryCode : "";
   data.originCode = !isEmpty(data.originCode) ? data.originCode : "";
   data.destinationCode = !isEmpty(data.destinationCode)
     ? data.destinationCode
@@ -85,8 +84,13 @@ module.exports = function validateStoreRequest(data) {
     errors.phoneNumber = "Phone number is required";
   }
 
-  if (Validator.isEmpty(data.countryCode)) {
-    errors.countryCode = "Country code is required";
+  if (!Validator.isEmpty(data.phoneNumber)) {
+    if (!data.phoneNumber.isValid) {
+      errors.phoneNumberIsValid = "Enter a valid phone number";
+    }
+    if (!data.phoneNumber.isMobile) {
+      errors.phoneNumberIsMobile = "The entered number isn't a mobile number";
+    }
   }
 
   if (Validator.isEmpty(data.originCode)) {

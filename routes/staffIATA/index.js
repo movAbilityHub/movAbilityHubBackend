@@ -36,7 +36,6 @@ router.post("/register", (req, res) => {
         lastName: req.body.lastName,
         email: req.body.email,
         phoneNumber: req.body.phoneNumber,
-        countryCode: req.body.countryCode,
         password: req.body.password,
         staffID: req.body.staffID
       });
@@ -90,9 +89,8 @@ router.post("/login", (req, res) => {
           lastName: staff.lastName,
           email: staff.email,
           phoneNumber: staff.phoneNumber,
-          countryCode: staff.countryCode,
           staffID: staff.staffID,
-          userType: customer.userType
+          userType: staff.userType
         };
 
         // Sign token

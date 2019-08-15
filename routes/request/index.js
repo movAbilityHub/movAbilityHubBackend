@@ -44,7 +44,6 @@ router.post("/storeRequest", (req, res) => {
         service: req.body.service,
         requestedFor: req.body.requestedFor,
         phoneNumber: req.body.phoneNumber,
-        countryCode: req.body.countryCode,
         transitDestination: req.body.transitDestination,
         transitDestinationCode: req.body.transitDestinationCode,
         destinationCode: req.body.destinationCode,

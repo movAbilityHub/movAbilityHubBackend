@@ -37,15 +37,7 @@ const careReceiverSchema = new Schema({
     type: String,
     required: false
   },
-  telephoneCountryCode: {
-    type: String,
-    required: false
-  },
   mobile: {
-    type: String,
-    required: true
-  },
-  mobileCountryCode: {
     type: String,
     required: true
   },

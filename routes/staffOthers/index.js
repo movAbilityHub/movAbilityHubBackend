@@ -36,7 +36,6 @@ router.post("/register", (req, res) => {
         code: req.body.code,
         email: req.body.email,
         phoneNumber: req.body.phoneNumber,
-        countryCode: req.body.countryCode,
         password: req.body.password,
         userType: req.body.userType
       });
@@ -102,7 +101,6 @@ router.post("/login", (req, res) => {
           email: staff.email,
           organisationName: staff.organisationName,
           phoneNumber: staff.phoneNumber,
-          countryCode: staff.countryCode,
           userType: staff.userType
         };
 
