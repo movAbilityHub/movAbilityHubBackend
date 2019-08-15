@@ -5,7 +5,7 @@ const router = express.Router();
 const customer = require("./customer");
 const staffIATA = require("./staffIATA");
 const staffOthers = require("./staffOthers");
-//const request = require("./request");
+const request = require("./request");
 //const careReceiver = require("./careReceiver");
 const travelAgents = require("./travelAgents");
 
@@ -13,7 +13,7 @@ const travelAgents = require("./travelAgents");
 router.use("/customer", customer);
 router.use("/staffIATA", staffIATA);
 router.use("/staffOthers", staffOthers);
-///router.use("/request", request);
+router.use("/request", request);
 //router.use("/careReceiver", careReceiver);
 router.use("/travelAgents", travelAgents);
 
