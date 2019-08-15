@@ -9,6 +9,7 @@ const validateViewOpenRequest = require("../../validation/viewOpenRequest");
 const validateViewClosedRequest = require("../../validation/viewClosedRequest");
 const validateRequestActionByAirline = require("../../validation/requestActionByAirline");
 const validateRequestActionByAirport = require("../../validation/requestActionByAirport");
+const validateCancelRequest = require("../../validation/cancelRequest");
 
 router.post("/storeRequest", (req, res) => {
   // Form validation
@@ -41,7 +42,8 @@ router.post("/storeRequest", (req, res) => {
         service: req.body.origin,
         requestedFor: req.body.requestedFor,
         phoneNumber: req.body.phoneNumber,
-        countryCode: req.body.countryCode
+        countryCode: req.body.countryCode,
+        transitDestination: req.body.transitDestination
       });
 
       newRequest
@@ -62,7 +64,7 @@ router.post("/viewOpenRequest", (req, res) => {
     return res.status(400).json(errors);
   }
 
-  Request.findOne({
+  Request.find({
     requesterID: req.body.requesterID,
     status: req.body.status
   })
@@ -84,7 +86,7 @@ router.post("/viewClosedRequest", (req, res) => {
     return res.status(400).json(errors);
   }
 
-  Request.findOne({
+  Request.find({
     requesterID: req.body.requesterID,
     closed: req.body.closed
   })
@@ -106,12 +108,10 @@ router.post("/performActionByAirline", (req, res) => {
     return res.status(400).json(errors);
   }
 
-  if (req.body.airlineResponse === true) {
-    Request.findOneAndUpdate(
-      {
-        id: req.body.id
-      },
-      { $set: { airlineResponse: true, status: true } },
+  if (req.body.airlineResponse === "true") {
+    Request.findByIdAndUpdate(
+      req.body.id,
+      { $set: { airlineResponse: req.body.airlineResponse } },
       { new: true },
       (err, request) => {
         if (err) return res.status(500).send(err);
@@ -119,14 +119,17 @@ router.post("/performActionByAirline", (req, res) => {
       }
     );
   } else {
-    Request.findOne({ id: req.body.id })
+    Request.findById(req.body.id)
       .then(request => {
-        if (request.aiportResponse === false) {
-          Request.findOneAndUpdate(
+        if (request.aiportResponse === "false") {
+          Request.findByIdAndUpdate(
+            req.body.id,
             {
-              id: req.body.id
+              $set: {
+                airlineResponse: req.body.airlineResponse,
+                status: false
+              }
             },
-            { $set: { status: false } },
             { new: true },
             (err, request) => {
               if (err) return res.status(500).send(err);
@@ -134,7 +137,19 @@ router.post("/performActionByAirline", (req, res) => {
             }
           );
         } else {
-          return res.status(200);
+          Request.findByIdAndUpdate(
+            req.body.id,
+            {
+              $set: {
+                airlineResponse: req.body.airlineResponse
+              }
+            },
+            { new: true },
+            (err, request) => {
+              if (err) return res.status(500).send(err);
+              return res.status(200);
+            }
+          );
         }
       })
       .catch(err => res.status(500).send(err));
@@ -151,12 +166,10 @@ router.post("/performActionByAirport", (req, res) => {
     return res.status(400).json(errors);
   }
 
-  if (req.body.airportResponse === true) {
-    Request.findOneAndUpdate(
-      {
-        id: req.body.id
-      },
-      { $set: { airportResponse: true, status: true } },
+  if (req.body.airportResponse === "true") {
+    Request.findByIdAndUpdate(
+      req.body.id,
+      { $set: { airportResponse: req.body.airportResponse } },
       { new: true },
       (err, request) => {
         if (err) return res.status(500).send(err);
@@ -164,14 +177,17 @@ router.post("/performActionByAirport", (req, res) => {
       }
     );
   } else {
-    Request.findOne({ id: req.body.id })
+    Request.findById(req.body.id)
       .then(request => {
-        if (request.airlineResponse === false) {
-          Request.findOneAndUpdate(
+        if (request.airlineResponse === "false") {
+          Request.findByIdAndUpdate(
+            req.body.id,
             {
-              id: req.body.id
+              $set: {
+                airportResponse: req.body.airportResponse,
+                status: false
+              }
             },
-            { $set: { status: false } },
             { new: true },
             (err, request) => {
               if (err) return res.status(500).send(err);
@@ -179,11 +195,72 @@ router.post("/performActionByAirport", (req, res) => {
             }
           );
         } else {
-          return res.status(200);
+          Request.findByIdAndUpdate(
+            req.body.id,
+            {
+              $set: {
+                airportResponse: req.body.airportResponse
+              }
+            },
+            { new: true },
+            (err, request) => {
+              if (err) return res.status(500).send(err);
+              return res.status(200);
+            }
+          );
         }
       })
       .catch(err => res.status(500).send(err));
   }
+});
+
+router.post("/cancelRequest", (req, res) => {
+  // Form validation
+
+  const { errors, isValid } = validateCancelRequest(req.body);
+
+  // Check validation
+  if (!isValid) {
+    return res.status(400).json(errors);
+  }
+
+  Request.findByIdAndRemove(req.body.id, (err, request) => {
+    if (err) return res.status(500).send(err);
+    const response = {
+      message: "Request successfully deleted",
+      id: request._id
+    };
+    return res.status(200).send({ response: response });
+  });
+});
+
+router.post("/closeRequest", (req, res) => {
+  // Form validation
+
+  const { errors, isValid } = validateCancelRequest(req.body);
+
+  // Check validation
+  if (!isValid) {
+    return res.status(400).json(errors);
+  }
+
+  Request.findByIdAndUpdate(
+    req.body.id,
+    {
+      $set: {
+        closed: true
+      }
+    },
+    { new: true },
+    (err, request) => {
+      if (err) return res.status(500).send(err);
+      const response = {
+        message: "Request successfully closed",
+        id: request._id
+      };
+      return res.status(200).send({ response: response });
+    }
+  );
 });
 
 module.exports = router;
