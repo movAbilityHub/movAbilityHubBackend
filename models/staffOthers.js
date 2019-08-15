@@ -44,6 +44,10 @@ const staffOthersSchema = new Schema({
     type: Date,
     default: Date.now
   },
+  approved: {
+    type: Boolean,
+    default: false
+  },
   approvedOn: {
     type: Date,
     required: false
