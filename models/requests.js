@@ -17,6 +17,14 @@ const requestSchema = new Schema({
     type: String,
     required: true
   },
+  travelDate: {
+    type: String,
+    required: true
+  },
+  travelTime: {
+    type: String,
+    required: true
+  },
   flightNumber: {
     type: String,
     required: true
@@ -25,27 +33,23 @@ const requestSchema = new Schema({
     type: String,
     required: true
   },
-  originTerminalNumber: {
-    type: String,
-    required: false
-  },
   destination: {
     type: String,
     required: true
-  },
-  destinationTerminalNumber: {
-    type: String,
-    required: false
   },
   transitDestination: {
     type: [String],
     required: false
   },
-  transitDestinationTerminalNumber: {
-    type: [String],
-    required: false
-  },
   status: {
+    type: Boolean,
+    default: null
+  },
+  airlineResponse: {
+    type: Boolean,
+    default: null
+  },
+  airportResponse: {
     type: Boolean,
     default: null
   },
@@ -66,8 +70,32 @@ const requestSchema = new Schema({
     required: true
   },
   requestedFor: {
+    type: String,
+    required: true
+  },
+  phoneNumber: {
     type: Number,
     required: true
+  },
+  countryCode: {
+    type: String,
+    required: true
+  },
+  disability: {
+    type: String,
+    required: true
+  },
+  age: {
+    type: Number,
+    required: true
+  },
+  service: {
+    type: String,
+    required: true
+  },
+  closed: {
+    type: Boolean,
+    default: false
   }
 });
 
