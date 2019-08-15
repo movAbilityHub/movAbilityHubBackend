@@ -3,14 +3,6 @@ const Schema = mongoose.Schema;
 
 // Create Schema
 const staffOthersSchema = new Schema({
-  firstName: {
-    type: String,
-    required: true
-  },
-  lastName: {
-    type: String,
-    required: true
-  },
   organisationName: {
     type: String,
     required: true
