@@ -30,8 +30,6 @@ router.post("/register", (req, res) => {
       return res.status(400).json({ email: "Email already exists" });
     } else {
       const newStaff = new StaffOthers({
-        firstName: req.body.firstName,
-        lastName: req.body.lastName,
         organisationName: req.body.organisationName,
         code: req.body.code,
         email: req.body.email,
@@ -47,8 +45,13 @@ router.post("/register", (req, res) => {
           newStaff.password = hash;
           newStaff
             .save()
-            .then(staff => res.status(201))
-            .catch(err => console.log(err));
+            .then(staff =>
+              res.status(200).json({
+                message:
+                  "Registration requested successfully. Contact your IATA representative to confirm registration."
+              })
+            )
+            .catch(err => res.status(400).send({ error: err }));
         });
       });
     }
@@ -96,8 +99,6 @@ router.post("/login", (req, res) => {
         const payload = {
           id: staff._id,
           code: staff.code,
-          firstName: staff.firstName,
-          lastName: staff.lastName,
           email: staff.email,
           organisationName: staff.organisationName,
           phoneNumber: staff.phoneNumber,
