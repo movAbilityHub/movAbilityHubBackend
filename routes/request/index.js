@@ -47,7 +47,7 @@ router.post("/storeRequest", (req, res) => {
       newRequest
         .save()
         .then(request => res.status(201))
-        .catch(err => return res.status(500).send(err));
+        .catch(err => res.status(500).send(err));
     }
   });
 });
@@ -71,7 +71,7 @@ router.post("/viewOpenRequest", (req, res) => {
         return res.status(200).json({ request: request });
       }
     })
-    .catch(err => return res.status(500).send(err));
+    .catch(err => res.status(500).send(err));
 });
 
 router.post("/viewClosedRequest", (req, res) => {
@@ -93,7 +93,7 @@ router.post("/viewClosedRequest", (req, res) => {
         return res.status(200).json({ request: request });
       }
     })
-    .catch(err => return res.status(500).send(err));
+    .catch(err => res.status(500).send(err));
 });
 
 router.post("/performActionByAirline", (req, res) => {
@@ -119,24 +119,25 @@ router.post("/performActionByAirline", (req, res) => {
       }
     );
   } else {
-    Request.findOne({ id: req.body.id }).then(request => {
+    Request.findOne({ id: req.body.id })
+      .then(request => {
         if (request.aiportResponse === false) {
           Request.findOneAndUpdate(
-          {
-            id: req.body.id
-          },
-          { $set: { status: false } },
-          { new: true },
-          (err, request) => {
-            if (err) return res.status(500).send(err);
-            return res.status(200);
-          }
-        );
-      } else {
-        return res.status(200);
-      }
-    })
-    .catch(err => return res.status(500).send(err));
+            {
+              id: req.body.id
+            },
+            { $set: { status: false } },
+            { new: true },
+            (err, request) => {
+              if (err) return res.status(500).send(err);
+              return res.status(200);
+            }
+          );
+        } else {
+          return res.status(200);
+        }
+      })
+      .catch(err => res.status(500).send(err));
   }
 });
 
@@ -163,24 +164,25 @@ router.post("/performActionByAirport", (req, res) => {
       }
     );
   } else {
-    Request.findOne({ id: req.body.id }).then(request => {
+    Request.findOne({ id: req.body.id })
+      .then(request => {
         if (request.airlineResponse === false) {
           Request.findOneAndUpdate(
-          {
-            id: req.body.id
-          },
-          { $set: { status: false } },
-          { new: true },
-          (err, request) => {
-            if (err) return res.status(500).send(err);
-            return res.status(200);
-          }
-        );
-      } else {
-        return res.status(200);
-      }
-    })
-    .catch(err => return res.status(500).send(err));
+            {
+              id: req.body.id
+            },
+            { $set: { status: false } },
+            { new: true },
+            (err, request) => {
+              if (err) return res.status(500).send(err);
+              return res.status(200);
+            }
+          );
+        } else {
+          return res.status(200);
+        }
+      })
+      .catch(err => res.status(500).send(err));
   }
 });
 
