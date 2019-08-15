@@ -8,9 +8,11 @@ const passport = require("passport");
 // Load input validation
 const validateIATAStaffRegisterInput = require("../../validation/iataStaffRegister");
 const validateLoginInput = require("../../validation/login");
+const validateAccountApproval = require("../../validation/staffAccountApproval");
 
 // Load User model
 const StaffIATA = require("../../models/staffIATA");
+const StaffOthers = require("../../models/staffOthers");
 
 // @route POST users/register
 // @desc Register user
@@ -112,6 +114,47 @@ router.post("/login", (req, res) => {
           .json({ passwordincorrect: "Password incorrect" });
       }
     });
+  });
+});
+
+router.post("/approveAccount", (req, res) => {
+  // Form validation
+
+  const { errors, isValid } = validateAccountApproval(req.body);
+
+  // Check validation
+  if (!isValid) {
+    return res.status(400).json(errors);
+  }
+
+  StaffOthers.findByIdAndUpdate(
+    req.body.id,
+    {
+      $set: {
+        approved: true,
+        approvedOn: Date.now(),
+        approvedBy: req.body.name
+      }
+    },
+    { multi: true, new: true },
+    (err, result) => {
+      if (err) return res.status(500).send(err);
+      return res.status(200).json({ response: "Account approved" });
+    }
+  );
+});
+
+router.get("/fetchApprovedAccounts", (req, res) => {
+  StaffOthers.find({ approved: true }, (err, accounts) => {
+    if (err) return res.status(500).send(err);
+    return res.status(200).json({ accounts: accounts });
+  });
+});
+
+router.get("/fetchAccountsAwaitingApproval", (req, res) => {
+  StaffOthers.find({ approved: false }, (err, accounts) => {
+    if (err) return res.status(500).send(err);
+    return res.status(200).json({ accounts: accounts });
   });
 });
 
