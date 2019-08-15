@@ -84,15 +84,6 @@ module.exports = function validateStoreRequest(data) {
     errors.phoneNumber = "Phone number is required";
   }
 
-  if (!Validator.isEmpty(data.phoneNumber)) {
-    if (!data.phoneNumber.isValid) {
-      errors.phoneNumberIsValid = "Enter a valid phone number";
-    }
-    if (!data.phoneNumber.isMobile) {
-      errors.phoneNumberIsMobile = "The entered number isn't a mobile number";
-    }
-  }
-
   if (Validator.isEmpty(data.originCode)) {
     errors.originCode = "Error, Try Again";
   }

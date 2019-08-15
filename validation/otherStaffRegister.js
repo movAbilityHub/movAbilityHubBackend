@@ -7,8 +7,6 @@ module.exports = function validateOtherStaffRegisterInput(data) {
   let errors = {};
 
   // Convert empty fields to an empty string so we can use validator functions
-  data.firstName = !isEmpty(data.firstName) ? data.firstName : "";
-  data.lastName = !isEmpty(data.lastName) ? data.lastName : "";
   data.organisationName = !isEmpty(data.organisationName)
     ? data.organisationName
     : "";
@@ -18,15 +16,6 @@ module.exports = function validateOtherStaffRegisterInput(data) {
   data.phoneNumber = !isEmpty(data.phoneNumber) ? data.phoneNumber : "";
   data.password = !isEmpty(data.password) ? data.password : "";
   data.password2 = !isEmpty(data.password2) ? data.password2 : "";
-
-  // Name checks
-  if (Validator.isEmpty(data.firstName)) {
-    errors.firstName = "First Name field is required";
-  }
-
-  if (Validator.isEmpty(data.lastName)) {
-    errors.lastName = "Last Name field is required";
-  }
 
   // Organisation Name checks
   if (Validator.isEmpty(data.organisationName)) {
@@ -53,16 +42,6 @@ module.exports = function validateOtherStaffRegisterInput(data) {
   // Phone Number checks
   if (Validator.isEmpty(data.phoneNumber)) {
     errors.phoneNumber = "Phone Number is required";
-  }
-
-  // Region code + Phone number validation
-  if (!Validator.isEmpty(data.phoneNumber)) {
-    if (!data.phoneNumber.isValid) {
-      errors.phoneNumberIsValid = "Enter a valid phone number";
-    }
-    if (!data.phoneNumber.isMobile) {
-      errors.phoneNumberIsMobile = "The entered number isn't a mobile number";
-    }
   }
 
   // Password checks

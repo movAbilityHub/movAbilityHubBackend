@@ -35,16 +35,6 @@ module.exports = function validateRegisterInput(data) {
     errors.phoneNumber = "Phone Number is required";
   }
 
-  // Region code + Phone number validation
-  if (!Validator.isEmpty(data.phoneNumber)) {
-    if (!data.phoneNumber.isValid) {
-      errors.phoneNumberIsValid = "Enter a valid phone number";
-    }
-    if (!data.phoneNumber.isMobile) {
-      errors.phoneNumberIsMobile = "The entered number isn't a mobile number";
-    }
-  }
-
   // Password checks
   if (Validator.isEmpty(data.password)) {
     errors.password = "Password is required";
