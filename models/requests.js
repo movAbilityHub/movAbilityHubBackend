@@ -43,15 +43,15 @@ const requestSchema = new Schema({
   },
   status: {
     type: Boolean,
-    default: null
+    default: true
   },
   airlineResponse: {
-    type: Boolean,
-    default: null
+    type: String,
+    default: "null"
   },
   airportResponse: {
-    type: Boolean,
-    default: null
+    type: String,
+    default: "null"
   },
   acceptedBy: {
     type: String,
