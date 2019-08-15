@@ -22,6 +22,12 @@ module.exports = function validateStoreRequest(data) {
   data.requestedFor = !isEmpty(data.requestedFor) ? data.requestedFor : "";
   data.phoneNumber = !isEmpty(data.phoneNumber) ? data.phoneNumber : "";
   data.countryCode = !isEmpty(data.countryCode) ? data.countryCode : "";
+  data.originCode = !isEmpty(data.originCode) ? data.originCode : "";
+  data.destinationCode = !isEmpty(data.destinationCode)
+    ? data.destinationCode
+    : "";
+  data.airline = !isEmpty(data.airline) ? data.airline : "";
+  data.airlineCode = !isEmpty(data.airlineCode) ? data.airlineCode : "";
 
   if (Validator.isEmpty(data.passportNumber)) {
     errors.passportNumber = "Passport Number is required";
@@ -81,6 +87,22 @@ module.exports = function validateStoreRequest(data) {
 
   if (Validator.isEmpty(data.countryCode)) {
     errors.countryCode = "Country code is required";
+  }
+
+  if (Validator.isEmpty(data.originCode)) {
+    errors.originCode = "Error, Try Again";
+  }
+
+  if (Validator.isEmpty(data.destinationCode)) {
+    errors.destinationCode = "Error, Try Again";
+  }
+
+  if (Validator.isEmpty(data.airline)) {
+    errors.airline = "Airline is required";
+  }
+
+  if (Validator.isEmpty(data.airlineCode)) {
+    errors.airlineCode = "Error, Try Again";
   }
 
   return {
