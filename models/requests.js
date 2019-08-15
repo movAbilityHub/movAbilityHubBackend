@@ -29,7 +29,19 @@ const requestSchema = new Schema({
     type: String,
     required: true
   },
+  airline: {
+    type: String,
+    required: true
+  },
+  airlineCode: {
+    type: String,
+    required: true
+  },
   origin: {
+    type: String,
+    required: true
+  },
+  originCode: {
     type: String,
     required: true
   },
@@ -37,7 +49,15 @@ const requestSchema = new Schema({
     type: String,
     required: true
   },
+  destinationCode: {
+    type: String,
+    required: true
+  },
   transitDestination: {
+    type: [String],
+    required: false
+  },
+  transitDestinationCode: {
     type: [String],
     required: false
   },
