@@ -8,7 +8,7 @@ module.exports = function validateViewOpenRequest(data) {
   data.requesterID = !isEmpty(data.requesterID) ? data.requesterID : "";
   data.status = !isEmpty(data.status) ? data.status : "";
 
-  if (Validator.isEmpty(data.requesterID) || Validator.isEmpty(data.status)) {
+  if (Validator.isEmpty(data.requesterID)) {
     errors.error = "Error. Refresh the page.";
   }
 
