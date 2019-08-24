@@ -22,12 +22,12 @@ router.post("/register", (req, res) => {
 
   // Check validation
   if (!isValid) {
-    return res.status(400).json(errors);
+    return res.json(errors);
   }
 
   StaffOthers.findOne({ email: req.body.email }).then(staff => {
     if (staff) {
-      return res.status(400).json({ email: "Email already exists" });
+      return res.json({ email: "Email already exists" });
     } else {
       const newStaff = new StaffOthers({
         organisationName: req.body.organisationName,
@@ -48,7 +48,7 @@ router.post("/register", (req, res) => {
             .then(staff =>
               res.status(200).json({
                 message:
-                  "Registration requested successfully. Contact your IATA representative to confirm registration."
+                  "Registration requested successfully. Contact your IATA representative to confirm registration.", success: true
               })
             )
             .catch(err => res.status(400).send({ error: err }));
@@ -68,7 +68,7 @@ router.post("/login", (req, res) => {
 
   // Check validation
   if (!isValid) {
-    return res.status(400).json(errors);
+    return res.json(errors);
   }
 
   const email = req.body.email;
@@ -79,16 +79,16 @@ router.post("/login", (req, res) => {
   StaffOthers.findOne({ email }).then(staff => {
     // Check if user exists
     if (!staff) {
-      return res.status(404).json({ userNotFound: "User not found" });
+      return res.json({ userNotFound: "User not found" });
     }
 
     // Check if user exists
     if (!staff.approvedOn) {
-      return res.status(400).json({ account: "Account not approved" });
+      return res.json({ account: "Account not approved" });
     }
 
     if (staff.userType !== userType) {
-      return res.status(400).json({ userNotFound: "User not found" });
+      return res.json({ userNotFound: "User not found" });
     }
 
     // Check password
@@ -114,14 +114,12 @@ router.post("/login", (req, res) => {
           },
           (err, token) => {
             res.status(200).json({
-              token: token
+              token: token, success: true
             });
           }
         );
       } else {
-        return res
-          .status(400)
-          .json({ passwordincorrect: "Password incorrect" });
+        return res.json({ passwordincorrect: "Password incorrect" });
       }
     });
   });

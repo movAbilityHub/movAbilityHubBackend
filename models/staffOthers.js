@@ -43,7 +43,11 @@ const staffOthersSchema = new Schema({
   approvedBy: {
     type: String,
     required: false
-  }
+  },
+  staffID: {
+    type: String,
+    required: false
+  },
 });
 
 module.exports = StaffOthers = mongoose.model("staffOthers", staffOthersSchema);

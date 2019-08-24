@@ -22,12 +22,12 @@ router.post("/register", (req, res) => {
 
   // Check validation
   if (!isValid) {
-    return res.status(400).json(errors);
+    return res.json(errors);
   }
 
   Customer.findOne({ email: req.body.email }).then(customer => {
     if (customer) {
-      return res.status(400).json({ email: "Email already exists" });
+      return res.json({ email: "Email already exists" });
     } else {
       const newCustomer = new Customer({
         firstName: req.body.firstName,
@@ -45,9 +45,9 @@ router.post("/register", (req, res) => {
           newCustomer
             .save()
             .then(customer =>
-              res.status(200).json({ message: "Registration successful" })
-            )
-            .catch(err => res.status(400).send({ error: err, no: "no" }));
+              res.status(200).json({ message: "Registration successful", success: true })
+            ) 
+            .catch(err => res.status(400).send({ error: err }));
         });
       });
     }
@@ -64,7 +64,7 @@ router.post("/login", (req, res) => {
 
   // Check validation
   if (!isValid) {
-    return res.status(400).json(errors);
+    return res.json(errors);
   }
 
   const email = req.body.email;
@@ -74,42 +74,43 @@ router.post("/login", (req, res) => {
   Customer.findOne({ email }).then(customer => {
     // Check if user exists
     if (!customer) {
-      return res.status(404).json({ userNotFound: "User not found" });
+      return res.json({ userNotFound: "User not found" });
     }
 
     // Check password
-    bcrypt.compare(password, customer.password).then(isMatch => {
-      if (isMatch) {
-        // User matched
-        // Create JWT Payload
-        const payload = {
-          id: customer._id,
-          firstName: customer.firstName,
-          lastName: customer.lastName,
-          email: customer.email,
-          phoneNumber: customer.phoneNumber,
-          userType: customer.userType
-        };
+    bcrypt
+      .compare(password, customer.password)
+      .then(isMatch => {
+        if (isMatch) {
+          // User matched
+          // Create JWT Payload
+          const payload = {
+            id: customer._id,
+            firstName: customer.firstName,
+            lastName: customer.lastName,
+            email: customer.email,
+            phoneNumber: customer.phoneNumber,
+            userType: customer.userType
+          };
 
-        // Sign token
-        jwt.sign(
-          payload,
-          keys.secretOrKey,
-          {
-            expiresIn: 604800 // 7 days in seconds
-          },
-          (err, token) => {
-            res.status(200).json({
-              token: token
-            });
-          }
-        );
-      } else {
-        return res
-          .status(400)
-          .json({ passwordincorrect: "Password incorrect" });
-      }
-    });
+          // Sign token
+          jwt.sign(
+            payload,
+            keys.secretOrKey,
+            {
+              expiresIn: 604800 // 7 days in seconds
+            },
+            (err, token) => {
+              res.status(200).json({
+                token: token, success: true
+              });
+            }
+          );
+        } else {
+          return res.json({ passwordincorrect: "Password incorrect" });
+        }
+      })
+      .catch(err => res.status(400).send({ error: err }));
   });
 });
 

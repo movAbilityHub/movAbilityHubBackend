@@ -9,7 +9,7 @@ const passport = require("passport");
 const validateIATAStaffRegisterInput = require("../../validation/iataStaffRegister");
 const validateLoginInput = require("../../validation/login");
 const validateAccountApproval = require("../../validation/staffAccountApproval");
-
+const validateRejectAccount = require("../../validation/rejectAccount");
 // Load User model
 const StaffIATA = require("../../models/staffIATA");
 const StaffOthers = require("../../models/staffOthers");
@@ -24,12 +24,12 @@ router.post("/register", (req, res) => {
 
   // Check validation
   if (!isValid) {
-    return res.status(400).json(errors);
+    return res.json(errors);
   }
 
   StaffIATA.findOne({ email: req.body.email }).then(staff => {
     if (staff) {
-      return res.status(400).json({ email: "Email already exists" });
+      return res.json({ email: "Email already exists" });
     } else {
       const newStaff = new StaffIATA({
         firstName: req.body.firstName,
@@ -47,7 +47,7 @@ router.post("/register", (req, res) => {
           newStaff.password = hash;
           newStaff
             .save()
-            .then(staff => res.status(201))
+            .then(staff => res.status(201).json({success: true}))
             .catch(err => console.log(err));
         });
       });
@@ -65,7 +65,7 @@ router.post("/login", (req, res) => {
 
   // Check validation
   if (!isValid) {
-    return res.status(400).json(errors);
+    return res.json(errors);
   }
 
   const email = req.body.email;
@@ -75,7 +75,7 @@ router.post("/login", (req, res) => {
   StaffIATA.findOne({ email }).then(staff => {
     // Check if user exists
     if (!staff) {
-      return res.status(404).json({ userNotFound: "User not found" });
+      return res.json({ userNotFound: "User not found" });
     }
 
     // Check password
@@ -102,14 +102,12 @@ router.post("/login", (req, res) => {
           },
           (err, token) => {
             res.status(200).json({
-              token: token
+              token: token, success: true
             });
           }
         );
       } else {
-        return res
-          .status(400)
-          .json({ passwordincorrect: "Password incorrect" });
+        return res.json({ passwordincorrect: "Password incorrect" });
       }
     });
   });
@@ -122,7 +120,7 @@ router.post("/approveAccount", (req, res) => {
 
   // Check validation
   if (!isValid) {
-    return res.status(400).json(errors);
+    return res.json(errors);
   }
 
   StaffOthers.findByIdAndUpdate(
@@ -131,28 +129,45 @@ router.post("/approveAccount", (req, res) => {
       $set: {
         approved: true,
         approvedOn: Date.now(),
-        approvedBy: req.body.name
+        approvedBy: req.body.name,
+        staffID: req.body.staffID
       }
     },
     { multi: true, new: true },
     (err, result) => {
-      if (err) return res.status(500).send(err);
-      return res.status(200).json({ response: "Account approved" });
+      if (err) return res.status(400).send(err);
+      return res.status(200).json({ message: "Account approved", success: true });
     }
   );
 });
 
+router.post("/rejectAccount", (req, res) => {
+  // Form validation
+
+  const { errors, isValid } = validateRejectAccount(req.body);
+
+  // Check validation
+  if (!isValid) {
+    return res.json(errors);
+  }
+
+  StaffOthers.findByIdAndRemove(req.body.id, (err, request) => {
+    if (err) return res.status(400).send(err);
+    return res.status(200).send({ message: "Request deleted successfully", success: true});
+  });
+});
+
 router.get("/fetchApprovedAccounts", (req, res) => {
   StaffOthers.find({ approved: true }, (err, accounts) => {
-    if (err) return res.status(500).send(err);
+    if (err) return res.status(400).send(err);
     return res.status(200).json({ accounts: accounts });
   });
 });
 
 router.get("/fetchAccountsAwaitingApproval", (req, res) => {
   StaffOthers.find({ approved: false }, (err, accounts) => {
-    if (err) return res.status(500).send(err);
-    return res.status(200).json({ accounts: accounts });
+    if (err) return res.status(400).send(err);
+    return res.status(200).json({ accounts: accounts, success: true });
   });
 });
 

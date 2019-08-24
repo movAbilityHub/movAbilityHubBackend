@@ -40,10 +40,6 @@ module.exports = function validateStoreRequest(data) {
     errors.travelDate = "Travel Date is required";
   }
 
-  if (Validator.isEmpty(data.travelTime)) {
-    errors.travelTime = "Travel Time is required";
-  }
-
   if (Validator.isEmpty(data.flightNumber)) {
     errors.flightNumber = "Flight Number is required";
   }
@@ -78,10 +74,6 @@ module.exports = function validateStoreRequest(data) {
 
   if (Validator.isEmpty(data.requestedFor)) {
     errors.requestedFor = "Requested for is required";
-  }
-
-  if (Validator.isEmpty(data.phoneNumber)) {
-    errors.phoneNumber = "Phone number is required";
   }
 
   if (Validator.isEmpty(data.originCode)) {

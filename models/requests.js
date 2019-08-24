@@ -22,7 +22,7 @@ const requestSchema = new Schema({
     required: true
   },
   travelTime: {
-    type: String,
+    type: Number,
     required: true
   },
   flightNumber: {
@@ -58,6 +58,14 @@ const requestSchema = new Schema({
     required: false
   },
   transitDestinationCode: {
+    type: [String],
+    required: false
+  },
+  transitAirline: {
+    type: [String],
+    required: false
+  },
+  transitAirlineCode: {
     type: [String],
     required: false
   },

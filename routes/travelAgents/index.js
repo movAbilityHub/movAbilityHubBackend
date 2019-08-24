@@ -22,12 +22,12 @@ router.post("/register", (req, res) => {
 
   // Check validation
   if (!isValid) {
-    return res.status(400).json(errors);
+    return res.json(errors);
   }
 
   TravelAgents.findOne({ email: req.body.email }).then(agent => {
     if (agent) {
-      return res.status(400).json({ email: "Email already exists" });
+      return res.json({ email: "Email already exists" });
     } else {
       const newTravelAgent = new TravelAgents({
         firstName: req.body.firstName,
@@ -45,8 +45,8 @@ router.post("/register", (req, res) => {
           newTravelAgent.password = hash;
           newTravelAgent
             .save()
-            .then(agent => res.status(201))
-            .catch(err => console.log(err));
+            .then(agent => res.status(201).json({message: "Registered successfully", success: true}))
+            .catch(err => res.status(400).send(err));
         });
       });
     }
@@ -63,7 +63,7 @@ router.post("/login", (req, res) => {
 
   // Check validation
   if (!isValid) {
-    return res.status(400).json(errors);
+    return res.json(errors);
   }
 
   const email = req.body.email;
@@ -73,7 +73,7 @@ router.post("/login", (req, res) => {
   TravelAgents.findOne({ email }).then(agent => {
     // Check if user exists
     if (!agent) {
-      return res.status(404).json({ userNotFound: "User not found" });
+      return res.json({ userNotFound: "User not found" });
     }
 
     // Check password
@@ -100,14 +100,12 @@ router.post("/login", (req, res) => {
           },
           (err, token) => {
             res.status(200).json({
-              token: token
+              token: token, success: true
             });
           }
         );
       } else {
-        return res
-          .status(400)
-          .json({ passwordincorrect: "Password incorrect" });
+        return res.json({ passwordincorrect: "Password incorrect" });
       }
     });
   });

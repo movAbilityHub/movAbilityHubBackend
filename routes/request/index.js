@@ -20,14 +20,14 @@ router.post("/storeRequest", (req, res) => {
 
   // Check validation
   if (!isValid) {
-    return res.status(400).json(errors);
+    return res.json({ errors: errors });
   }
 
   Request.findOne({ ticketNumber: req.body.ticketNumber }).then(request => {
     if (request) {
-      return res
-        .status(400)
-        .json({ alreadyExists: "Request for this ticket already exists" });
+      return res.json({
+        alreadyExists: "Request for this ticket already exists"
+      });
     } else {
       const newRequest = new Request({
         passportNumber: req.body.passportNumber,
@@ -46,6 +46,8 @@ router.post("/storeRequest", (req, res) => {
         phoneNumber: req.body.phoneNumber,
         transitDestination: req.body.transitDestination,
         transitDestinationCode: req.body.transitDestinationCode,
+        transitAirline: req.body.transitAirline,
+        transitAirlineCode: req.body.transitAirlineCode,
         destinationCode: req.body.destinationCode,
         originCode: req.body.originCode,
         airline: req.body.airline,
@@ -69,7 +71,7 @@ router.post("/viewOpenRequest", (req, res) => {
 
   // Check validation
   if (!isValid) {
-    return res.status(400).json(errors);
+    return res.json(errors);
   }
 
   Request.find({
@@ -78,10 +80,10 @@ router.post("/viewOpenRequest", (req, res) => {
   })
     .then(request => {
       if (request) {
-        return res.status(200).json({ request: request });
+        return res.status(200).json({ request: request, success: true });
       }
     })
-    .catch(err => res.status(500).send(err));
+    .catch(err => res.status(400).send(err));
 });
 
 router.post("/viewClosedRequest", (req, res) => {
@@ -91,7 +93,7 @@ router.post("/viewClosedRequest", (req, res) => {
 
   // Check validation
   if (!isValid) {
-    return res.status(400).json(errors);
+    return res.json(errors);
   }
 
   Request.find({
@@ -100,10 +102,10 @@ router.post("/viewClosedRequest", (req, res) => {
   })
     .then(request => {
       if (request) {
-        return res.status(200).json({ request: request });
+        return res.status(200).json({ request: request, success: true });
       }
     })
-    .catch(err => res.status(500).send(err));
+    .catch(err => res.status(400).send(err));
 });
 
 router.post("/performActionByAirline", (req, res) => {
@@ -113,7 +115,7 @@ router.post("/performActionByAirline", (req, res) => {
 
   // Check validation
   if (!isValid) {
-    return res.status(400).json(errors);
+    return res.json(errors);
   }
 
   if (req.body.airlineResponse === "true") {
@@ -122,8 +124,8 @@ router.post("/performActionByAirline", (req, res) => {
       { $set: { airlineResponse: req.body.airlineResponse } },
       { new: true },
       (err, request) => {
-        if (err) return res.status(500).send(err);
-        return res.status(200);
+        if (err) return res.status(400).send(err);
+        return res.status(200).json({message: "Request approved"});
       }
     );
   } else {
@@ -140,8 +142,8 @@ router.post("/performActionByAirline", (req, res) => {
             },
             { new: true },
             (err, request) => {
-              if (err) return res.status(500).send(err);
-              return res.status(200);
+              if (err) return res.status(400).send(err);
+              return res.status(200).json({message: "Request denied"});
             }
           );
         } else {
@@ -154,13 +156,13 @@ router.post("/performActionByAirline", (req, res) => {
             },
             { new: true },
             (err, request) => {
-              if (err) return res.status(500).send(err);
-              return res.status(200);
+              if (err) return res.status(400).send(err);
+              return res.status(200).json({message: "Request denied"});
             }
           );
         }
       })
-      .catch(err => res.status(500).send(err));
+      .catch(err => res.status(400).send(err));
   }
 });
 
@@ -171,7 +173,7 @@ router.post("/performActionByAirport", (req, res) => {
 
   // Check validation
   if (!isValid) {
-    return res.status(400).json(errors);
+    return res.json(errors);
   }
 
   if (req.body.airportResponse === "true") {
@@ -180,8 +182,8 @@ router.post("/performActionByAirport", (req, res) => {
       { $set: { airportResponse: req.body.airportResponse } },
       { new: true },
       (err, request) => {
-        if (err) return res.status(500).send(err);
-        return res.status(200);
+        if (err) return res.status(400).send(err);
+        return res.status(200).json({message: "Request approved"});
       }
     );
   } else {
@@ -198,8 +200,8 @@ router.post("/performActionByAirport", (req, res) => {
             },
             { new: true },
             (err, request) => {
-              if (err) return res.status(500).send(err);
-              return res.status(200);
+              if (err) return res.status(400).send(err);
+              return res.status(200).json({message: "Request denied"});
             }
           );
         } else {
@@ -212,13 +214,13 @@ router.post("/performActionByAirport", (req, res) => {
             },
             { new: true },
             (err, request) => {
-              if (err) return res.status(500).send(err);
-              return res.status(200);
+              if (err) return res.status(400).send(err);
+              return res.status(200).json({message: "Request denied"});
             }
           );
         }
       })
-      .catch(err => res.status(500).send(err));
+      .catch(err => res.status(400).send(err));
   }
 });
 
@@ -229,16 +231,16 @@ router.post("/cancelRequest", (req, res) => {
 
   // Check validation
   if (!isValid) {
-    return res.status(400).json(errors);
+    return res.json(errors);
   }
 
   Request.findByIdAndRemove(req.body.id, (err, request) => {
-    if (err) return res.status(500).send(err);
+    if (err) return res.status(400).send(err);
     const response = {
       message: "Request successfully deleted",
       id: request._id
     };
-    return res.status(200).send({ response: response });
+    return res.status(200).send({ response: response, success: true});
   });
 });
 
@@ -300,17 +302,17 @@ router.post("/fetchRequestForAirport", (req, res) => {
 
   // Check validation
   if (!isValid) {
-    return res.status(400).json(errors);
+    return res.json(errors);
   }
 
   Request.find(
     {
-      $or: [{ originCode: req.body.code }, { destinationCode: req.body.code }],
+      originCode: req.body.code,
       closed: req.body.closed
     },
     (err, request) => {
-      if (err) return res.status(500).send(err);
-      return res.status(200).send({ request: request });
+      if (err) return res.status(400).send(err);
+      return res.status(200).send({ request: request, success: true });
     }
   );
 });
@@ -322,14 +324,14 @@ router.post("/fetchRequestForAirline", (req, res) => {
 
   // Check validation
   if (!isValid) {
-    return res.status(400).json(errors);
+    return res.json(errors);
   }
 
   Request.find(
     { airlineCode: req.body.code, closed: req.body.closed },
     (err, request) => {
-      if (err) return res.status(500).send(err);
-      return res.status(200).send({ request: request });
+      if (err) return res.status(400).send(err);
+      return res.status(200).send({ request: request, success: true });
     }
   );
 });
