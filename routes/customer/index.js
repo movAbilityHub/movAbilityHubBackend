@@ -8,10 +8,12 @@ const passport = require("passport");
 // Load input validation
 const validateRegisterInput = require("../../validation/register");
 const validateLoginInput = require("../../validation/login");
+const validateDestonation = require("../../validation/validateDestination");
+const validateDeparture = require("../../validation/validateDeparture");
 
 // Load User model
 const Customer = require("../../models/customers");
-
+const StaffOthers = require("../../models/staffOthers");
 // @route POST users/register
 // @desc Register user
 // @access Public
@@ -45,8 +47,10 @@ router.post("/register", (req, res) => {
           newCustomer
             .save()
             .then(customer =>
-              res.status(200).json({ message: "Registration successful", success: true })
-            ) 
+              res
+                .status(200)
+                .json({ message: "Registration successful", success: true })
+            )
             .catch(err => res.status(400).send({ error: err }));
         });
       });
@@ -102,7 +106,8 @@ router.post("/login", (req, res) => {
             },
             (err, token) => {
               res.status(200).json({
-                token: token, success: true
+                token: token,
+                success: true
               });
             }
           );
@@ -112,6 +117,54 @@ router.post("/login", (req, res) => {
       })
       .catch(err => res.status(400).send({ error: err }));
   });
+});
+
+router.post("/checkDestination", (req, res) => {
+  // Form validation
+
+  const { errors, isValid } = validateDestonation(req.body);
+
+  // Check validation
+  if (!isValid) {
+    return res.json(errors);
+  }
+
+  StaffOthers.findOne({
+    code: req.body.destination
+  })
+    .then(result => {
+      console.log(result);
+      if (!result) {
+        return res.json({ message: "Destination airport has not registered." });
+      } else {
+        return res.json({ success: true });
+      }
+    })
+    .catch(err => res.status(400).send(err));
+});
+
+router.post("/checkDeparture", (req, res) => {
+  // Form validation
+
+  const { errors, isValid } = validateDeparture(req.body);
+
+  // Check validation
+  if (!isValid) {
+    return res.json(errors);
+  }
+
+  StaffOthers.findOne({
+    code: req.body.departure
+  })
+    .then(result => {
+      console.log(result);
+      if (!result) {
+        return res.json({ message: "Departure airport has not registered." });
+      } else {
+        return res.json({ success: true });
+      }
+    })
+    .catch(err => res.status(400).send(err));
 });
 
 module.exports = router;
