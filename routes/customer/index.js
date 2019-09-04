@@ -134,7 +134,9 @@ router.post("/checkDestination", (req, res) => {
   })
     .then(result => {
       if (!result) {
-        return res.json({ message: "Destination airport has not registered." });
+        return res.json({
+          errors: "Destination airport has not registered."
+        });
       } else {
         return res.json({ success: true });
       }
@@ -157,7 +159,9 @@ router.post("/checkDeparture", (req, res) => {
   })
     .then(result => {
       if (!result) {
-        return res.json({ message: "Departure airport has not registered." });
+        return res.json({
+          errors: "Departure airport has not registered."
+        });
       } else {
         return res.json({ success: true });
       }
