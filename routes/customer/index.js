@@ -133,7 +133,6 @@ router.post("/checkDestination", (req, res) => {
     code: req.body.destination
   })
     .then(result => {
-      console.log(result);
       if (!result) {
         return res.json({ message: "Destination airport has not registered." });
       } else {
@@ -157,7 +156,6 @@ router.post("/checkDeparture", (req, res) => {
     code: req.body.departure
   })
     .then(result => {
-      console.log(result);
       if (!result) {
         return res.json({ message: "Departure airport has not registered." });
       } else {
