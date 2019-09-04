@@ -26,7 +26,7 @@ router.post("/storeRequest", (req, res) => {
   Request.findOne({ ticketNumber: req.body.ticketNumber }).then(request => {
     if (request) {
       return res.json({
-        alreadyExists: "Request for this ticket already exists"
+        errors: { alreadyExists: "Request for this ticket already exists" }
       });
     } else {
       const newRequest = new Request({
@@ -57,7 +57,9 @@ router.post("/storeRequest", (req, res) => {
       newRequest
         .save()
         .then(request =>
-          res.status(201).json({ message: "Request raised successfully" })
+          res
+            .status(201)
+            .json({ message: { success: "Request raised successfully" } })
         )
         .catch(err => res.status(500).send(err));
     }
@@ -125,7 +127,7 @@ router.post("/performActionByAirline", (req, res) => {
       { new: true },
       (err, request) => {
         if (err) return res.status(400).send(err);
-        return res.status(200).json({message: "Request approved"});
+        return res.status(200).json({ message: "Request approved" });
       }
     );
   } else {
@@ -143,7 +145,7 @@ router.post("/performActionByAirline", (req, res) => {
             { new: true },
             (err, request) => {
               if (err) return res.status(400).send(err);
-              return res.status(200).json({message: "Request denied"});
+              return res.status(200).json({ message: "Request denied" });
             }
           );
         } else {
@@ -157,7 +159,7 @@ router.post("/performActionByAirline", (req, res) => {
             { new: true },
             (err, request) => {
               if (err) return res.status(400).send(err);
-              return res.status(200).json({message: "Request denied"});
+              return res.status(200).json({ message: "Request denied" });
             }
           );
         }
@@ -183,7 +185,7 @@ router.post("/performActionByAirport", (req, res) => {
       { new: true },
       (err, request) => {
         if (err) return res.status(400).send(err);
-        return res.status(200).json({message: "Request approved"});
+        return res.status(200).json({ message: "Request approved" });
       }
     );
   } else {
@@ -201,7 +203,7 @@ router.post("/performActionByAirport", (req, res) => {
             { new: true },
             (err, request) => {
               if (err) return res.status(400).send(err);
-              return res.status(200).json({message: "Request denied"});
+              return res.status(200).json({ message: "Request denied" });
             }
           );
         } else {
@@ -215,7 +217,7 @@ router.post("/performActionByAirport", (req, res) => {
             { new: true },
             (err, request) => {
               if (err) return res.status(400).send(err);
-              return res.status(200).json({message: "Request denied"});
+              return res.status(200).json({ message: "Request denied" });
             }
           );
         }
@@ -237,10 +239,9 @@ router.post("/cancelRequest", (req, res) => {
   Request.findByIdAndRemove(req.body.id, (err, request) => {
     if (err) return res.status(400).send(err);
     const response = {
-      message: "Request successfully deleted",
-      id: request._id
+      message: "Request successfully deleted"
     };
-    return res.status(200).send({ response: response, success: true});
+    return res.status(200).send({ response: response, success: true });
   });
 });
 

@@ -48,7 +48,8 @@ router.post("/register", (req, res) => {
             .then(staff =>
               res.status(200).json({
                 message:
-                  "Registration requested successfully. Contact your IATA representative to confirm registration.", success: true
+                  "Registration requested successfully. Contact your IATA representative to confirm registration.",
+                success: true
               })
             )
             .catch(err => res.status(400).send({ error: err }));
@@ -114,7 +115,8 @@ router.post("/login", (req, res) => {
           },
           (err, token) => {
             res.status(200).json({
-              token: token, success: true
+              token: token,
+              success: true
             });
           }
         );

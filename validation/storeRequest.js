@@ -52,14 +52,6 @@ module.exports = function validateStoreRequest(data) {
     errors.destination = "Destination is required";
   }
 
-  if (Validator.isEmpty(data.requestedBy)) {
-    errors.requestedBy = "Error. Try again";
-  }
-
-  if (Validator.isEmpty(data.requesterID)) {
-    errors.requesterID = "Error. Try again";
-  }
-
   if (Validator.isEmpty(data.disability)) {
     errors.disability = "Disability is required";
   }
@@ -76,20 +68,8 @@ module.exports = function validateStoreRequest(data) {
     errors.requestedFor = "Requested for is required";
   }
 
-  if (Validator.isEmpty(data.originCode)) {
-    errors.originCode = "Error, Try Again";
-  }
-
-  if (Validator.isEmpty(data.destinationCode)) {
-    errors.destinationCode = "Error, Try Again";
-  }
-
   if (Validator.isEmpty(data.airline)) {
     errors.airline = "Airline is required";
-  }
-
-  if (Validator.isEmpty(data.airlineCode)) {
-    errors.airlineCode = "Error, Try Again";
   }
 
   return {

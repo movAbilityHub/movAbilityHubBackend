@@ -23,7 +23,7 @@ const requestSchema = new Schema({
   },
   travelTime: {
     type: Number,
-    required: true
+    required: false
   },
   flightNumber: {
     type: String,
