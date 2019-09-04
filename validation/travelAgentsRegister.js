@@ -17,16 +17,16 @@ module.exports = function validateTravelAgentsRegisterInput(data) {
 
   // Name checks
   if (Validator.isEmpty(data.firstName)) {
-    errors.firstName = "First Name field is required";
+    errors.firstName = "First Name is required";
   }
 
   if (Validator.isEmpty(data.lastName)) {
-    errors.lastName = "Last Name field is required";
+    errors.lastName = "Last Name is required";
   }
 
   // Email checks
   if (Validator.isEmpty(data.email)) {
-    errors.email = "Email field is required";
+    errors.email = "Email is required";
   } else if (!Validator.isEmail(data.email)) {
     errors.email = "Email is invalid";
   }

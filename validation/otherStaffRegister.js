@@ -29,7 +29,7 @@ module.exports = function validateOtherStaffRegisterInput(data) {
 
   // Email checks
   if (Validator.isEmpty(data.email)) {
-    errors.email = "Email field is required";
+    errors.email = "Email is required";
   } else if (!Validator.isEmail(data.email)) {
     errors.email = "Email is invalid";
   }
