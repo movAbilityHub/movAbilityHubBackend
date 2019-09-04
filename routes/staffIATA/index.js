@@ -47,7 +47,7 @@ router.post("/register", (req, res) => {
           newStaff.password = hash;
           newStaff
             .save()
-            .then(staff => res.status(201).json({success: true}))
+            .then(staff => res.status(201).json({ success: true }))
             .catch(err => console.log(err));
         });
       });
@@ -102,7 +102,8 @@ router.post("/login", (req, res) => {
           },
           (err, token) => {
             res.status(200).json({
-              token: token, success: true
+              token: token,
+              success: true
             });
           }
         );
@@ -136,7 +137,10 @@ router.post("/approveAccount", (req, res) => {
     { multi: true, new: true },
     (err, result) => {
       if (err) return res.status(400).send(err);
-      return res.status(200).json({ message: "Account approved", success: true });
+      return res.status(200).json({
+        message: { message: { message: "Account approved." } },
+        success: true
+      });
     }
   );
 });
@@ -153,7 +157,10 @@ router.post("/rejectAccount", (req, res) => {
 
   StaffOthers.findByIdAndRemove(req.body.id, (err, request) => {
     if (err) return res.status(400).send(err);
-    return res.status(200).send({ message: "Request deleted successfully", success: true});
+    return res.status(200).send({
+      message: { message: { message: "Registration request rejected." } },
+      success: true
+    });
   });
 });
 
