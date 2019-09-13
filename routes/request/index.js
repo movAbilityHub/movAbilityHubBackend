@@ -261,23 +261,61 @@ router.post("/closeRequest", (req, res) => {
     return res.status(400).json(errors);
   }
 
-  Request.findByIdAndUpdate(
-    req.body.id,
-    {
-      $set: {
-        closed: true
+  if (req.body.closedBy === "airline") {
+    Request.findByIdAndUpdate(
+      req.body.id,
+      {
+        $set: {
+          closedByAirline: true
+        }
+      },
+      { new: true },
+      (err, request) => {
+        if (err) return res.status(500).send(err);
+        const response = {
+          message: "Request successfully closed",
+          id: request._id
+        };
+        return res.status(200).send({ response: response });
       }
-    },
-    { new: true },
-    (err, request) => {
-      if (err) return res.status(500).send(err);
-      const response = {
-        message: "Request successfully closed",
-        id: request._id
-      };
-      return res.status(200).send({ response: response });
-    }
-  );
+    );
+  } else if (req.body.closedBy === "departureAirport") {
+    Request.findByIdAndUpdate(
+      req.body.id,
+      {
+        $set: {
+          closedByDepartureAirport: true
+        }
+      },
+      { new: true },
+      (err, request) => {
+        if (err) return res.status(500).send(err);
+        const response = {
+          message: "Request successfully closed",
+          id: request._id
+        };
+        return res.status(200).send({ response: response });
+      }
+    );
+  } else if (req.body.closedBy === "destinationAirport") {
+    Request.findByIdAndUpdate(
+      req.body.id,
+      {
+        $set: {
+          closedByDestinationAirport: true
+        }
+      },
+      { new: true },
+      (err, request) => {
+        if (err) return res.status(500).send(err);
+        const response = {
+          message: "Request successfully closed",
+          id: request._id
+        };
+        return res.status(200).send({ response: response });
+      }
+    );
+  }
 });
 
 router.get("/fetchRegisteredAirport", (req, res) => {
