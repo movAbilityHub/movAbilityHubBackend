@@ -117,7 +117,15 @@ const requestSchema = new Schema({
     type: String,
     required: true
   },
-  closed: {
+  closedByAirline: {
+    type: Boolean,
+    default: false
+  },
+  closedByDepartureAirport: {
+    type: Boolean,
+    default: false
+  },
+  closedByDestinationAirport: {
     type: Boolean,
     default: false
   }

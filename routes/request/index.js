@@ -78,7 +78,11 @@ router.post("/viewOpenRequest", (req, res) => {
 
   Request.find({
     requesterID: req.body.requesterID,
-    closed: false
+    $or: [
+      { closedByAirline: false },
+      { closedByDepartureAirport: false },
+      { closedByDestinationAirport: false }
+    ]
   })
     .then(request => {
       if (request) {
@@ -100,7 +104,9 @@ router.post("/viewClosedRequest", (req, res) => {
 
   Request.find({
     requesterID: req.body.requesterID,
-    closed: true
+    closedByAirline: true,
+    closedByDepartureAirport: true,
+    closedByDestinationAirport: true
   })
     .then(request => {
       if (request) {
@@ -308,8 +314,16 @@ router.post("/fetchRequestForAirport", (req, res) => {
 
   Request.find(
     {
-      originCode: req.body.code,
-      closed: req.body.closed
+      $or: [
+        {
+          originCode: req.body.code,
+          closedByDepartureAirport: req.body.closed
+        },
+        {
+          destinationCode: req.body.code,
+          closedByDestinationAirport: req.body.closed
+        }
+      ]
     },
     (err, request) => {
       if (err) return res.status(400).send(err);
@@ -329,7 +343,7 @@ router.post("/fetchRequestForAirline", (req, res) => {
   }
 
   Request.find(
-    { airlineCode: req.body.code, closed: req.body.closed },
+    { airlineCode: req.body.code, closedByAirline: req.body.closed },
     (err, request) => {
       if (err) return res.status(400).send(err);
       return res.status(200).send({ request: request, success: true });
