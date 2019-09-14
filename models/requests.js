@@ -77,7 +77,11 @@ const requestSchema = new Schema({
     type: String,
     default: "null"
   },
-  airportResponse: {
+  departureAirportResponse: {
+    type: String,
+    default: "null"
+  },
+  destinationAirportResponse: {
     type: String,
     default: "null"
   },
