@@ -78,11 +78,7 @@ router.post("/viewOpenRequest", (req, res) => {
 
   Request.find({
     requesterID: req.body.requesterID,
-    $or: [
-      { closedByAirline: false },
-      { closedByDepartureAirport: false },
-      { closedByDestinationAirport: false }
-    ]
+    closedByPassenger: false
   })
     .then(request => {
       if (request) {
@@ -104,9 +100,7 @@ router.post("/viewClosedRequest", (req, res) => {
 
   Request.find({
     requesterID: req.body.requesterID,
-    closedByAirline: true,
-    closedByDepartureAirport: true,
-    closedByDestinationAirport: true
+    closedByPassenger: true
   })
     .then(request => {
       if (request) {
@@ -245,7 +239,7 @@ router.post("/cancelRequest", (req, res) => {
   Request.findByIdAndRemove(req.body.id, (err, request) => {
     if (err) return res.status(400).send(err);
     const response = {
-      message: "Request successfully deleted"
+      message: "Request " + request.id + " successfully deleted"
     };
     return res.status(200).send({ response: response, success: true });
   });
@@ -385,6 +379,34 @@ router.post("/fetchRequestForAirline", (req, res) => {
     (err, request) => {
       if (err) return res.status(400).send(err);
       return res.status(200).send({ request: request, success: true });
+    }
+  );
+});
+
+router.post("/closeRequestByPassenger", (req, res) => {
+  // Form validation
+
+  const { errors, isValid } = validateCancelRequest(req.body);
+
+  // Check validation
+  if (!isValid) {
+    return res.json(errors);
+  }
+
+  Request.findByIdAndUpdate(
+    req.body.id,
+    {
+      $set: {
+        closedByPassenger: true
+      }
+    },
+    { new: true },
+    (err, request) => {
+      if (err) return res.status(400).send(err);
+      const response = {
+        message: "Request " + request.id + " successfully closed"
+      };
+      return res.status(200).send({ response: response, success: true });
     }
   );
 });

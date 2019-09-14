@@ -132,6 +132,10 @@ const requestSchema = new Schema({
   closedByDestinationAirport: {
     type: Boolean,
     default: false
+  },
+  closedByPassenger: {
+    type: Boolean,
+    default: false
   }
 });
 
