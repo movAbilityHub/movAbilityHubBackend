@@ -127,13 +127,19 @@ router.post("/performActionByAirline", (req, res) => {
       { new: true },
       (err, request) => {
         if (err) return res.status(400).send(err);
-        return res.status(200).json({ message: "Request approved" });
+        const response = {
+          message: "Request " + request.id + " approved"
+        };
+        return res.status(200).send({ response: response });
       }
     );
   } else {
     Request.findById(req.body.id)
       .then(request => {
-        if (request.aiportResponse === "false") {
+        if (
+          request.destinationAiportResponse === "false" &&
+          request.departureAiportResponse === "false"
+        ) {
           Request.findByIdAndUpdate(
             req.body.id,
             {
@@ -145,7 +151,10 @@ router.post("/performActionByAirline", (req, res) => {
             { new: true },
             (err, request) => {
               if (err) return res.status(400).send(err);
-              return res.status(200).json({ message: "Request denied" });
+              const response = {
+                message: "Request " + request.id + " denied"
+              };
+              return res.status(200).send({ response: response });
             }
           );
         } else {
@@ -159,7 +168,10 @@ router.post("/performActionByAirline", (req, res) => {
             { new: true },
             (err, request) => {
               if (err) return res.status(400).send(err);
-              return res.status(200).json({ message: "Request denied" });
+              const response = {
+                message: "Request " + request.id + " denied"
+              };
+              return res.status(200).send({ response: response });
             }
           );
         }
@@ -179,47 +191,113 @@ router.post("/performActionByAirport", (req, res) => {
   }
 
   if (req.body.airportResponse === "true") {
-    Request.findByIdAndUpdate(
-      req.body.id,
-      { $set: { airportResponse: req.body.airportResponse } },
-      { new: true },
-      (err, request) => {
-        if (err) return res.status(400).send(err);
-        return res.status(200).json({ message: "Request approved" });
-      }
-    );
+    if (req.body.responseBy === "departureAirport") {
+      Request.findByIdAndUpdate(
+        req.body.id,
+        { $set: { departureAirportResponse: req.body.airportResponse } },
+        { new: true },
+        (err, request) => {
+          if (err) return res.status(400).send(err);
+          const response = {
+            message: "Request " + request.id + " approved"
+          };
+          return res.status(200).send({ response: response });
+        }
+      );
+    } else if (req.body.responseBy === "destinationAirport") {
+      Request.findByIdAndUpdate(
+        req.body.id,
+        { $set: { destinationAirportResponse: req.body.airportResponse } },
+        { new: true },
+        (err, request) => {
+          if (err) return res.status(400).send(err);
+          const response = {
+            message: "Request " + request.id + " approved"
+          };
+          return res.status(200).send({ response: response });
+        }
+      );
+    }
   } else {
     Request.findById(req.body.id)
       .then(request => {
-        if (request.airlineResponse === "false") {
-          Request.findByIdAndUpdate(
-            req.body.id,
-            {
-              $set: {
-                airportResponse: req.body.airportResponse,
-                status: false
+        if (
+          request.departureAirlineResponse === "false" &&
+          request.destinationAirlineResponse === "false"
+        ) {
+          if (req.body.responseBy === "departureAirport") {
+            Request.findByIdAndUpdate(
+              req.body.id,
+              {
+                $set: {
+                  departureAirportResponse: req.body.airportResponse,
+                  status: false
+                }
+              },
+              { new: true },
+              (err, request) => {
+                if (err) return res.status(400).send(err);
+                const response = {
+                  message: "Request " + request.id + " denied"
+                };
+                return res.status(200).send({ response: response });
               }
-            },
-            { new: true },
-            (err, request) => {
-              if (err) return res.status(400).send(err);
-              return res.status(200).json({ message: "Request denied" });
-            }
-          );
+            );
+          } else if (req.body.responseBy === "destinationAirport") {
+            Request.findByIdAndUpdate(
+              req.body.id,
+              {
+                $set: {
+                  destinationAirportResponse: req.body.airportResponse,
+                  status: false
+                }
+              },
+              { new: true },
+              (err, request) => {
+                if (err) return res.status(400).send(err);
+                const response = {
+                  message: "Request " + request.id + " denied"
+                };
+                return res.status(200).send({ response: response });
+              }
+            );
+          }
         } else {
-          Request.findByIdAndUpdate(
-            req.body.id,
-            {
-              $set: {
-                airportResponse: req.body.airportResponse
+          if (req.body.responseBy === "departureAirport") {
+            Request.findByIdAndUpdate(
+              req.body.id,
+              {
+                $set: {
+                  departureAirportResponse: req.body.airportResponse
+                }
+              },
+              { new: true },
+              (err, request) => {
+                if (err) return res.status(400).send(err);
+                const response = {
+                  message: "Request " + request.id + " denied"
+                };
+                return res.status(200).send({ response: response });
               }
-            },
-            { new: true },
-            (err, request) => {
-              if (err) return res.status(400).send(err);
-              return res.status(200).json({ message: "Request denied" });
-            }
-          );
+            );
+          } else if (req.body.responseBy === "destinationAirport") {
+            Request.findByIdAndUpdate(
+              req.body.id,
+              {
+                $set: {
+                  destinationAirportResponse: req.body.airportResponse
+                }
+              },
+              { new: true },
+              (err, request) => {
+                if (err) return res.status(400).send(err);
+                const response = {
+                  message: "Request " + request.id + " denied"
+                };
+                return res.status(200).send({ response: response });
+              }
+            );
+          }
         }
       })
       .catch(err => res.status(400).send(err));

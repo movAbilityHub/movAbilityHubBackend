@@ -9,8 +9,13 @@ module.exports = function validateRequestActionByAirport(data) {
   data.airportResponse = !isEmpty(data.airportResponse)
     ? data.airportResponse
     : "";
+  data.responseBy = !isEmpty(data.responseBy) ? data.responseBy : "";
 
-  if (Validator.isEmpty(data.id) || Validator.isEmpty(data.airportResponse)) {
+  if (
+    Validator.isEmpty(data.id) ||
+    Validator.isEmpty(data.airportResponse) ||
+    Validator.isEmpty(data.responseBy)
+  ) {
     errors.id = "Action could not be perfomed. Try again.";
   }
 
